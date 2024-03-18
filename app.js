@@ -5,6 +5,7 @@ const morgan = require("morgan");
 const dbConnection = require("./config/database.js");
 const ApiError = require("./utils/apiError");
 const globalError = require("./middlewares/errorMiddleware");
+const cors = require("cors");
 //Routers
 const authRoute = require("./routes/authRoute.js");
 const messageRoute = require("./routes/messageRoute.js");
@@ -15,6 +16,7 @@ dbConnection();
 
 // express app & server from socket
 const { app, server } = require("./socket/socket.js");
+app.use(cors());
 
 // Middlewares
 app.use(express.json());

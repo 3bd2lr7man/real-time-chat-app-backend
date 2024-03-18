@@ -19,7 +19,6 @@ const decodeToken = (token) => {
 };
 const signup = asyncHandler(async (req, res, next) => {
   const { username, gender, email, phonenumber, password } = req.body;
-  //{ $or: [{ name: "Rambo" }, { breed: "Pugg" }, { age: 2 }] }
   const checkUser = await User.findOne({
     $or: [
       { username: username },
