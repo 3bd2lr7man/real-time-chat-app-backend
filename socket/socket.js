@@ -3,7 +3,7 @@ const http = require("http");
 const express = require("express");
 const { decodeToken } = require("../services/authService");
 const app = express();
-
+const User = require("../models/userModel");
 const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
@@ -56,11 +56,15 @@ io.on("connection", async (socket) => {
   }
 
   // socket.on() is used to listen to the events
-  socket.on("disconnect", () => {
+  socket.on("disconnect", async () => {
     console.log("user disconnected", socket.id);
     if (userId) {
       delete userSocketMap[userId];
       io.emit("getOnlineUsers", Object.keys(userSocketMap));
+      const user = await User.findById(userId);
+      user.lastSeen = Date.now();
+      await user.save();
+      console.log(user);
     }
   });
 });
